@@ -41,13 +41,31 @@ __pycache__/
 *.jar
 *.war
 
+# React build
+/build
+/.pnp
+.pnp.js
+
 # Environment variables
 .env
 .env.local
 .env.*.local
+.env.development
+.env.production
 
 # Temporary files
 *.tmp
 *.temp
 .cache/
 
+# Deployment
+.vercel
+.netlify
+
+# Testing
+coverage/
+.nyc_output/
+
+# Production
+/client/build
+/server/uploads
