@@ -9,7 +9,7 @@ const initialDreams = [
 
 // Dream/goal mapping and management
 const Dreams = () => {
-  const [dreams, setDreams] = useState(initialDreams);
+  const [dreams] = useState(initialDreams);
 
   const handleNodeClick = id => {
     // TODO: node interaction logic
