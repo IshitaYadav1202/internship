@@ -1,4 +1,4 @@
-# EchoCapsule 🎙️✨
+# EchoCapsule 
 
 A full-stack MERN application for preserving memories, mapping dreams, and creating collaborative voice journals.
 
