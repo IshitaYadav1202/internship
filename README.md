@@ -64,58 +64,6 @@ echocapsule/
 - MongoDB (local or cloud instance)
 - npm or yarn
 
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/ISHITA-YADAV12/internship.git
-cd internship
-```
-
-2. Create `.env` file in the root directory:
-```env
-NODE_ENV=development
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/echocapsule
-JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
-JWT_EXPIRE=30d
-JWT_COOKIE_EXPIRE=30
-REACT_APP_API_URL=http://localhost:5000/api
-```
-
-3. Install server dependencies:
-```bash
-cd server
-npm install
-```
-
-4. Install client dependencies:
-```bash
-cd ../client
-npm install
-```
-
-### Running the Application
-
-#### Start the Backend Server
-
-```bash
-cd server
-npm run dev    # Development mode with nodemon
-# or
-npm start      # Production mode
-```
-
-Server will run on `http://localhost:5000`
-
-#### Start the Frontend Client
-
-```bash
-cd client
-npm start
-```
-
-Client will run on `http://localhost:3000`
 
 ## API Endpoints
 
@@ -175,44 +123,7 @@ Tokens are returned upon successful login/registration.
 
 ## Development
 
-### Backend Development
-```bash
-cd server
-npm run dev    # Uses nodemon for auto-restart
-```
 
-### Frontend Development
-```bash
-cd client
-npm start      # React development server with hot reload
-```
-
-## Production Build
-
-### Build Frontend
-```bash
-cd client
-npm run build
-```
-
-### Run Production Server
-```bash
-cd server
-NODE_ENV=production npm start
-```
-
-## Deployment
-
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
-
-### Quick Deploy
-
-1. **Backend**: Deploy `server/` folder to Render/Railway/Heroku
-2. **Frontend**: Deploy `client/` folder to Vercel/Netlify
-3. **Database**: Set up MongoDB Atlas
-4. **Environment Variables**: Configure in deployment platform
-
-See [DEPLOY.md](./DEPLOY.md) for quick reference.
 
 ## Features in Development
 
