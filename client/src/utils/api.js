@@ -6,33 +6,72 @@
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
+// Get token from localStorage
+const getToken = () => {
+  return localStorage.getItem('token');
+};
+
 /**
  * Generic fetch wrapper with error handling
  * Add authentication headers, error handling, and response parsing here
  */
 const apiRequest = async (endpoint, options = {}) => {
-  // Add API request logic here
-  // Include: auth headers, error handling, response parsing
+  const token = getToken();
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      ...options,
+      headers,
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Something went wrong');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('API Error:', error);
+    throw error;
+  }
 };
 
 /**
  * Time Capsules API
  */
 export const capsulesAPI = {
-  getAll: () => {
-    // Add get all capsules logic here
+  getAll: async () => {
+    return apiRequest('/capsules', { method: 'GET' });
   },
-  getById: (id) => {
-    // Add get capsule by id logic here
+  getById: async (id) => {
+    return apiRequest(`/capsules/${id}`, { method: 'GET' });
   },
-  create: (data) => {
-    // Add create capsule logic here
+  create: async (data) => {
+    return apiRequest('/capsules', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   },
-  update: (id, data) => {
-    // Add update capsule logic here
+  update: async (id, data) => {
+    return apiRequest(`/capsules/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
   },
-  delete: (id) => {
-    // Add delete capsule logic here
+  delete: async (id) => {
+    return apiRequest(`/capsules/${id}`, { method: 'DELETE' });
+  },
+  unlock: async (id) => {
+    return apiRequest(`/capsules/${id}/unlock`, { method: 'PUT' });
   }
 };
 
@@ -40,23 +79,32 @@ export const capsulesAPI = {
  * Dreams API
  */
 export const dreamsAPI = {
-  getAll: () => {
-    // Add get all dreams logic here
+  getAll: async () => {
+    return apiRequest('/dreams', { method: 'GET' });
   },
-  getById: (id) => {
-    // Add get dream by id logic here
+  getById: async (id) => {
+    return apiRequest(`/dreams/${id}`, { method: 'GET' });
   },
-  create: (data) => {
-    // Add create dream logic here
+  create: async (data) => {
+    return apiRequest('/dreams', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   },
-  update: (id, data) => {
-    // Add update dream logic here
+  update: async (id, data) => {
+    return apiRequest(`/dreams/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
   },
-  delete: (id) => {
-    // Add delete dream logic here
+  delete: async (id) => {
+    return apiRequest(`/dreams/${id}`, { method: 'DELETE' });
   },
-  createConnection: (fromId, toId) => {
-    // Add create connection logic here
+  createConnection: async (fromId, toId) => {
+    return apiRequest(`/dreams/${fromId}/connect`, {
+      method: 'POST',
+      body: JSON.stringify({ toId }),
+    });
   }
 };
 
@@ -64,26 +112,38 @@ export const dreamsAPI = {
  * Voice Journals API
  */
 export const journalsAPI = {
-  getAll: () => {
-    // Add get all journals logic here
+  getAll: async () => {
+    return apiRequest('/voice-journals', { method: 'GET' });
   },
-  getById: (id) => {
-    // Add get journal by id logic here
+  getById: async (id) => {
+    return apiRequest(`/voice-journals/${id}`, { method: 'GET' });
   },
-  create: (data) => {
-    // Add create journal logic here
+  create: async (data) => {
+    return apiRequest('/voice-journals', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   },
-  update: (id, data) => {
-    // Add update journal logic here
+  update: async (id, data) => {
+    return apiRequest(`/voice-journals/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
   },
-  delete: (id) => {
-    // Add delete journal logic here
+  delete: async (id) => {
+    return apiRequest(`/voice-journals/${id}`, { method: 'DELETE' });
   },
-  uploadAudio: (audioBlob) => {
-    // Add audio upload logic here
+  addCollaborator: async (id, email) => {
+    return apiRequest(`/voice-journals/${id}/collaborators`, {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
   },
-  transcribe: (audioUrl) => {
-    // Add transcription API call here
+  addComment: async (id, comment) => {
+    return apiRequest(`/voice-journals/${id}/comments`, {
+      method: 'POST',
+      body: JSON.stringify({ comment }),
+    });
   }
 };
 
@@ -91,17 +151,31 @@ export const journalsAPI = {
  * Authentication API
  */
 export const authAPI = {
-  login: (credentials) => {
-    // Add login logic here
+  login: async (credentials) => {
+    const data = await apiRequest('/users/login', {
+      method: 'POST',
+      body: JSON.stringify(credentials),
+    });
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+    }
+    return data;
   },
-  register: (userData) => {
-    // Add register logic here
+  register: async (userData) => {
+    const data = await apiRequest('/users/register', {
+      method: 'POST',
+      body: JSON.stringify(userData),
+    });
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+    }
+    return data;
   },
   logout: () => {
-    // Add logout logic here
+    localStorage.removeItem('token');
   },
-  getCurrentUser: () => {
-    // Add get current user logic here
+  getCurrentUser: async () => {
+    return apiRequest('/users/me', { method: 'GET' });
   }
 };
 
